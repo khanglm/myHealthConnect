@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import vn.edu.hust.khanglm.core.database.MhcDatabase
 import vn.edu.hust.khanglm.core.database.dao.BurnedCaloriesDao
+import vn.edu.hust.khanglm.core.database.dao.DistanceDao
 import vn.edu.hust.khanglm.core.database.dao.HeartRateDao
 import vn.edu.hust.khanglm.core.database.dao.StepsDao
 import vn.edu.hust.khanglm.core.database.dao.UserDao
@@ -47,5 +48,10 @@ internal object MhcDatabaseModule {
     internal fun provideBurnedCaloriesDao(
         db: MhcDatabase
     ): BurnedCaloriesDao = db.getBurnedCaloriesDao()
+
+    @Provides
+    internal fun provideDistanceDao(
+        db: MhcDatabase
+    ): DistanceDao = db.getDistanceDao()
 
 }

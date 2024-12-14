@@ -26,6 +26,7 @@ class HiltConventionPlugin : Plugin<Project> {
             pluginManager.apply("com.google.devtools.ksp")
             dependencies {
                 add("ksp", libs.findLibrary("hilt.compiler").get())
+                add("ksp", libs.findLibrary("hilt.ext.compiler").get())
             }
 
             // Add support for Jvm Module, base on org.jetbrains.kotlin.jvm
@@ -40,6 +41,7 @@ class HiltConventionPlugin : Plugin<Project> {
                 pluginManager.apply("dagger.hilt.android.plugin")
                 dependencies {
                     add("implementation", libs.findLibrary("hilt.android").get())
+                    add("implementation", libs.findLibrary("hilt.ext.work").get())
                 }
             }
         }

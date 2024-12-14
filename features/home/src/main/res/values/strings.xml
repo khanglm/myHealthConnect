@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="features_home_burned_calories">Burned Calories</string>
+    <string name="features_home_burned_calories_unit">kCals</string>
+    <string name="features_home_walk_title">Walk</string>
+    <string name="features_home_steps_count_unit">Steps</string>
+    <string name="features_home_your_activity">Your Activity</string>
+</resources>

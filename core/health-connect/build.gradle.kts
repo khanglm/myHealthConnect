@@ -10,6 +10,7 @@ android {
 dependencies {
 
     implementation(project(":core:model"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.health.connect.api)
 

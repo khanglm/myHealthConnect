@@ -9,6 +9,8 @@ interface StepsCountDatasource {
     suspend fun insertStepsData(data: List<HealthStepsDataEntity>): List<Long>
 
     fun observeTotalStepInTimeRange(startTime: Long, endTime: Long): Flow<Long>
+
+    suspend fun getFirstTimeSyncDataInMillis(): Long
 }
 
 internal class StepsCountDatasourceImpl @Inject constructor(
@@ -20,7 +22,11 @@ internal class StepsCountDatasourceImpl @Inject constructor(
     }
 
     override fun observeTotalStepInTimeRange(startTime: Long, endTime: Long): Flow<Long> {
-        return observeTotalStepInTimeRange(startTime, endTime)
+        return stepsDao.observeTotalStepInTimeRange(startTime, endTime)
+    }
+
+    override suspend fun getFirstTimeSyncDataInMillis(): Long {
+        return stepsDao.getFirstTimeSyncDataInMillis()
     }
 
 }

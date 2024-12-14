@@ -1,42 +1,28 @@
 package vn.edu.hust.khanglm.myhealthconnect
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
-import androidx.health.connect.client.records.ActiveCaloriesBurnedRecord
+import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.HeartRateRecord
 import androidx.health.connect.client.records.StepsRecord
+import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import vn.edu.hust.khanglm.core.database.datasource.HeartRateDatasource
-import vn.edu.hust.khanglm.core.database.datasource.StepsCountDatasource
-import vn.edu.hust.khanglm.myhealthconnect.core.data.SyncHealthDataRepository
-import vn.edu.hust.khanglm.myhealthconnect.core.data.mapper.toEntity
-import vn.edu.hust.khanglm.myhealthconnect.healthconnect.HealthConnectDatasource
-import javax.inject.Inject
+import vn.edu.hust.khanglm.myhealthconnect.ui.MhcApp
+import vn.edu.hust.khanglm.myhealthconnect.ui.rememberMhcAppState
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var syncHealthDataRepository: SyncHealthDataRepository
-
-    @Inject
-    lateinit var healthConnectDatasource: HealthConnectDatasource
-
-    @Inject
-    lateinit var stepsCountDatasource: StepsCountDatasource
-
-    @Inject
-    lateinit var heartRateDatasource: HeartRateDatasource
+    private val _viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -46,32 +32,50 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            val coroutineScope = rememberCoroutineScope()
-            val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
-                Log.d("KhangLM2", "isGranted $isGranted")
-                if (isGranted.all { it.value }) {
-                    coroutineScope.launch {
-                        val syncedStepsData = healthConnectDatasource.fetchStepsCountData(0L, 0L)
-                        Log.d("KhangLm", "Steps synced = $syncedStepsData")
-                        stepsCountDatasource.insertStepsData(syncedStepsData.map { it.toEntity() })
-                    }
-                    coroutineScope.launch {
-                        val syncedHeartRateData = healthConnectDatasource.fetchHeartRateData(0L, 0L)
-                        Log.d("KhangLm", "heart rate synced = $syncedHeartRateData")
-                        heartRateDatasource.insertHeartRateRecord(syncedHeartRateData.map { it.toEntity() })
+            val appState = rememberMhcAppState()
+            RequestHealthConnectPermission()
+            MhcApp(
+                appState = appState
+            )
+        }
+    }
+
+    @Composable
+    private fun RequestHealthConnectPermission() {
+        val permission = PermissionController.createRequestPermissionResultContract()
+        val permissionLauncher = rememberLauncherForActivityResult(permission) { permissionResult ->
+            permissionResult.forEach { permission ->
+                when (permission) {
+                    HealthPermission.getReadPermission(StepsRecord::class) -> {
+                        _viewModel.startSyncStepsData()
+
                     }
 
+                    HealthPermission.getReadPermission(HeartRateRecord::class) -> {
+                        _viewModel.startSyncHeartRateData()
+
+                    }
+
+                    HealthPermission.getReadPermission(TotalCaloriesBurnedRecord::class) -> {
+                        _viewModel.startSyncBurnedCaloriesData()
+                    }
+
+                    HealthPermission.getReadPermission(DistanceRecord::class) -> {
+                        _viewModel.startSyncDistanceData()
+                    }
                 }
             }
-            LaunchedEffect(Unit) {
-                permissionLauncher.launch(
-                    arrayOf(
-                        HealthPermission.getReadPermission(StepsRecord::class),
-                        HealthPermission.getReadPermission(HeartRateRecord::class),
-                        HealthPermission.getReadPermission(ActiveCaloriesBurnedRecord::class)
-                    )
+        }
+
+        LaunchedEffect(Unit) {
+            permissionLauncher.launch(
+                setOf(
+                    HealthPermission.getReadPermission(StepsRecord::class),
+                    HealthPermission.getReadPermission(HeartRateRecord::class),
+                    HealthPermission.getReadPermission(TotalCaloriesBurnedRecord::class),
+                    HealthPermission.getReadPermission(DistanceRecord::class)
                 )
-            }
+            )
         }
     }
 }

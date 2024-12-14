@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import vn.edu.hust.khanglm.features.home.navigation.HomeRoute
+import vn.edu.hust.khanglm.features.home.navigation.homeScreen
 import vn.edu.hust.khanglm.myhealthconnect.ui.MhcAppState
 
 @Composable
@@ -18,6 +19,6 @@ fun MhcNavHost(
         startDestination = HomeRoute,
         modifier = modifier,
     ) {
-
+        homeScreen()
     }
 }

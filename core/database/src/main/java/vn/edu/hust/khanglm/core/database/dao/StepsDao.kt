@@ -17,4 +17,9 @@ internal interface StepsDao {
         "SELECT SUM(steps_info.steps) FROM steps_info WHERE steps_info.end_time <= :endTime AND steps_info.start_time >= :startTime"
     )
     fun observeTotalStepInTimeRange(startTime: Long, endTime: Long): Flow<Long>
+
+    @Query(
+        "SELECT MIN(start_time) FROM steps_info WHERE start_time != 0"
+    )
+    suspend fun getFirstTimeSyncDataInMillis(): Long
 }

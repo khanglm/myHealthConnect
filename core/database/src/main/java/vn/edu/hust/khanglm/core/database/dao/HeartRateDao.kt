@@ -14,7 +14,7 @@ internal interface HeartRateDao {
     suspend fun insertHeartRateData(heartRateData: List<HealthHeartRateEntity>): List<Long>
 
     @Query(
-        "SELECT AVG(heart_rate_info.heart_rate) FROM heart_rate_info WHERE heart_rate_info.start_time >= :startTime AND heart_rate_info.end_time <= :endTime"
+        "SELECT AVG(heart_rate) FROM heart_rate_info WHERE start_time >= :startTime AND end_time <= :endTime"
     )
     fun observeAverageHeartRateToday(startTime: Long, endTime: Long): Flow<Double>
 

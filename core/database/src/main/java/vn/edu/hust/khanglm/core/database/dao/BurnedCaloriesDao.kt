@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.Flow
 import vn.edu.hust.khanglm.core.database.entities.HealthBurnedCaloriesEntity
 
 @Dao
-internal interface BurnedCaloriesDao {
+interface BurnedCaloriesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBurnedCalories(data: List<HealthBurnedCaloriesEntity>): List<Long>
 
     @Query(
-        "SELECT SUM(table_burned_calories.burned_calories) FROM table_burned_calories WHERE table_burned_calories.start_time <= :endTime AND table_burned_calories.end_time >= :startTime"
+        "SELECT SUM(burned_calories) FROM table_burned_calories WHERE start_time >= :startTime AND end_time <= :endTime"
     )
     fun observeBurnedCaloriesInTimeRange(startTime: Long, endTime: Long): Flow<Double>
 }
