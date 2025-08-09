@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "2819b77c2ec056d03052c98eea815c28",
+    "identityHash": "11dd9d19112c97654c96d56b19037a97",
     "entities": [
       {
         "tableName": "heart_rate_info",
@@ -150,7 +150,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `user_name` TEXT NOT NULL, `dob` TEXT NOT NULL, `goal_steps` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `user_name` TEXT NOT NULL, `dob` TEXT NOT NULL, `gender` INTEGER NOT NULL, `goal_steps` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -168,6 +168,12 @@
             "fieldPath": "dob",
             "columnName": "dob",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -334,7 +340,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '2819b77c2ec056d03052c98eea815c28')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '11dd9d19112c97654c96d56b19037a97')"
     ]
   }
 }

@@ -80,7 +80,7 @@ internal fun ProgressChart(
 
         CircularProgressIndicator(
             modifier = Modifier.fillMaxSize(),
-            progress = { currentValue/targetValue },
+            progress = { currentValue/(targetValue.coerceAtLeast(1f)) },
             strokeWidth = 10.dp,
             gapSize = 0.dp,
             trackColor = Color(0xFFFFFFFF),

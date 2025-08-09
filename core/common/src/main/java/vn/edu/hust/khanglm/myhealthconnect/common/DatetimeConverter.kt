@@ -10,17 +10,23 @@ import java.util.Locale
 
 fun String.convertToTimeMillis(): Long {
     return try {
-        val sfd = SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'", Locale.getDefault())
+        val sfd = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val time = sfd.parse(this) ?: Date()
         time.time
     } catch (e: Exception) {
-        0L
+        Date().time
     }
 }
 
 fun Long.convertToDDMMMYYYYFormat(): String {
     return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(
         Date().apply { time = this@convertToDDMMMYYYYFormat }
+    )
+}
+
+fun Long.convertToBirthdayFormat(): String {
+    return SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(
+        Date().apply { time = this@convertToBirthdayFormat }
     )
 }
 

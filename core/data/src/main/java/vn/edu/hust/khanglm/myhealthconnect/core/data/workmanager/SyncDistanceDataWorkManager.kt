@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import vn.edu.hust.khanglm.core.database.datasource.DistanceDatasource
+import vn.edu.hust.khanglm.core.datastore.AppDataStoreDataSource
 import vn.edu.hust.khanglm.myhealthconnect.common.calculateTimeSyncData
 import vn.edu.hust.khanglm.myhealthconnect.core.data.mapper.toEntity
 import vn.edu.hust.khanglm.myhealthconnect.healthconnect.HealthConnectDatasource
@@ -16,13 +17,16 @@ internal class SyncDistanceDataWorkManager @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     private val healthConnectDatasource: HealthConnectDatasource,
-    private val distanceCaloriesDatasource: DistanceDatasource
+    private val distanceCaloriesDatasource: DistanceDatasource,
+    private val dataStoreDataSource: AppDataStoreDataSource
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         val fetchTime = calculateTimeSyncData()
-        val syncedDistanceData = healthConnectDatasource.fetchDistanceData(fetchTime.first, fetchTime.second)
+        val lastTimeUpdate = dataStoreDataSource.getLastUpdateDistance()
+        val startTime = lastTimeUpdate.takeIf { it > 0 && it < fetchTime.second } ?: fetchTime.first
+        val syncedDistanceData = healthConnectDatasource.fetchDistanceData(startTime, fetchTime.second)
         distanceCaloriesDatasource.insertDistanceData(syncedDistanceData.map { it.toEntity() })
-
+        dataStoreDataSource.setLastUpdateDistanceTimeStamp(fetchTime.second)
         return Result.success()
     }
 }

@@ -10,6 +10,8 @@ import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.SyncHealthDataRe
 import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.SyncHealthDataRepositoryImpl
 import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.TimeSyncDataRepository
 import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.TimeSyncDataRepositoryImpl
+import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.UserInfoRepository
+import vn.edu.hust.khanglm.myhealthconnect.core.data.repository.UserInfoRepositoryImpl
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -23,5 +25,8 @@ internal interface AppRepositoryModule {
 
     @Binds
     fun bindTimeSyncDataRepository(impl: TimeSyncDataRepositoryImpl): TimeSyncDataRepository
+
+    @Binds
+    fun bindUserInfoRepository(impl: UserInfoRepositoryImpl): UserInfoRepository
 
 }

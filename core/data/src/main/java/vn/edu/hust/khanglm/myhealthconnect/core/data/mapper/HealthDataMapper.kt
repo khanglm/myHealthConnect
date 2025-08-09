@@ -9,10 +9,10 @@ import vn.edu.hust.khanglm.myhealthconnect.healthconnect.model.HealthConnectBurn
 import vn.edu.hust.khanglm.myhealthconnect.healthconnect.model.HealthConnectDistance
 import vn.edu.hust.khanglm.myhealthconnect.healthconnect.model.HealthConnectHeartRate
 import vn.edu.hust.khanglm.myhealthconnect.healthconnect.model.HealthConnectStepsCount
-import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.BurnedCalories
-import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.Distance
-import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.HeartRate
-import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.StepsCount
+import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.healthdata.BurnedCalories
+import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.healthdata.Distance
+import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.healthdata.HeartRate
+import vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.healthdata.StepsCount
 
 fun HealthConnectStepsCount.toEntity(): HealthStepsDataEntity {
     return HealthStepsDataEntity(

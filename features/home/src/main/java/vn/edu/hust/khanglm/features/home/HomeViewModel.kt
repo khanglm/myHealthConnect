@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
@@ -50,8 +49,9 @@ internal class HomeViewModel @Inject constructor(
                 is Result.Success -> {
                     HomeUIState.Success(
                         data = HomeUIModel(
-                            healthSummaryData = result.data,
-                            selectedTime = _selectedTime.value.convertToDDMMMYYYYFormat()
+                            healthSummaryData = result.data.second,
+                            selectedTime = _selectedTime.value.convertToDDMMMYYYYFormat(),
+                            userName = result.data.first
                         )
                     )
                 }

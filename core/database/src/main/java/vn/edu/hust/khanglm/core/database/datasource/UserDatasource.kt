@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import vn.edu.hust.khanglm.core.database.dao.UserDao
 import vn.edu.hust.khanglm.core.database.entities.UserEntity
+import javax.inject.Inject
 
 interface UserDatasource {
 
@@ -13,9 +14,10 @@ interface UserDatasource {
 
 }
 
-internal class UserDatasourceImpl(
+internal class UserDatasourceImpl @Inject constructor(
     private val userDao: UserDao
 ) : UserDatasource {
+
     override fun observeUserInfo(): Flow<UserEntity?> {
         return userDao.getUserInfo().map { it.firstOrNull() }
     }

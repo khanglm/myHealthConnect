@@ -11,8 +11,12 @@ import vn.edu.hust.khanglm.features.home.HomeScreenRoute
 
 fun NavController.navigateToHomeScreen(navOptions: NavOptions) = navigate(route = HomeRoute, navOptions)
 
-fun NavGraphBuilder.homeScreen() {
+fun NavGraphBuilder.homeScreen(
+    onUserInfoClicked: () -> Unit
+) {
     composable<HomeRoute> {
-        HomeScreenRoute()
+        HomeScreenRoute(
+            onUserInfoClicked = onUserInfoClicked
+        )
     }
 }

@@ -13,6 +13,8 @@ data class UserEntity(
     val userName: String,
     @ColumnInfo(name = "dob")
     val dob: String,
+    @ColumnInfo(name = "gender")
+    val gender: Int,
     @ColumnInfo(name = "goal_steps")
     val goalSteps: Long
 )

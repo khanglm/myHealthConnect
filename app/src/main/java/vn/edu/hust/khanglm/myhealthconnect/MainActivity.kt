@@ -6,8 +6,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.health.connect.client.PermissionController
 import androidx.health.connect.client.permission.HealthPermission
@@ -15,7 +18,9 @@ import androidx.health.connect.client.records.DistanceRecord
 import androidx.health.connect.client.records.HeartRateRecord
 import androidx.health.connect.client.records.StepsRecord
 import androidx.health.connect.client.records.TotalCaloriesBurnedRecord
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import vn.edu.hust.khanglm.features.personal.PersonalRoute
 import vn.edu.hust.khanglm.myhealthconnect.ui.MhcApp
 import vn.edu.hust.khanglm.myhealthconnect.ui.rememberMhcAppState
 
@@ -32,11 +37,19 @@ class MainActivity : ComponentActivity() {
         }
         enableEdgeToEdge()
         setContent {
-            val appState = rememberMhcAppState()
-            RequestHealthConnectPermission()
-            MhcApp(
-                appState = appState
-            )
+            val isUserInputInfo by _viewModel.isUserInputInfo.collectAsStateWithLifecycle()
+            if (isUserInputInfo) {
+                val appState = rememberMhcAppState()
+                RequestHealthConnectPermission()
+                MhcApp(
+                    appState = appState
+                )
+            } else {
+                PersonalRoute(
+                    modifier = Modifier.navigationBarsPadding(),
+                    canGoBack = false
+                )
+            }
         }
     }
 

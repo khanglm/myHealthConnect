@@ -1,5 +1,6 @@
 package vn.edu.hust.khanglm.myhealthconnect.common.result
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -18,5 +19,8 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> = map<T, Result<T>> {
     Result.Success(it)
 }
     .onStart { emit(Result.Loading) }
-    .catch { Result.Error(it) }
+    .catch {
+        Log.e("asResult", it.message.orEmpty(), it)
+        Result.Error(it)
+    }
 

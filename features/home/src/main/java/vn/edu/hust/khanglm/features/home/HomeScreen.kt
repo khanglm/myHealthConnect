@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import android.icu.util.TimeZone
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +45,8 @@ import vn.edu.hust.khanglm.core.ui.R as coreUI
 @Composable
 internal fun HomeScreenRoute(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onUserInfoClicked: () -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -57,10 +59,9 @@ internal fun HomeScreenRoute(
         firstTimeSyncData = viewModel.firstTimeSyncData,
         onChangeTimeFilter = {
             viewModel.setNewTimeSelected(it)
-        }
+        },
+        onUserInfoClicked = onUserInfoClicked
     )
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +71,8 @@ internal fun HomeScreen(
     uiState: HomeUIState,
     selectedTime: Long,
     firstTimeSyncData: Long,
-    onChangeTimeFilter: (Long) -> Unit
+    onChangeTimeFilter: (Long) -> Unit,
+    onUserInfoClicked: () -> Unit = {}
 ) {
     var shouldShowDateTimePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
@@ -94,8 +96,14 @@ internal fun HomeScreen(
                     .navigationBarsPadding()
             ) {
                 UserInfoSummary(
-                    userName = "Le Minh Khang",
+                    userName = uiState.data.userName,
                     modifier = Modifier.padding(horizontal = 12.dp)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) {
+                            onUserInfoClicked()
+                        }
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
@@ -130,7 +138,7 @@ internal fun HomeScreen(
                     item(key = "step") {
                         StepsTrackingCard(
                             totalSteps = uiState.data.healthSummaryData.totalSteps,
-                            target = 10000L
+                            target = uiState.data.healthSummaryData.targetSteps
                         )
                     }
                     item(key = "burned_calories") {

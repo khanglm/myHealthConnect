@@ -1,4 +1,4 @@
-package vn.edu.hust.khanglm.myhealthconnect.model.healthconnect
+package vn.edu.hust.khanglm.myhealthconnect.model.healthconnect.healthdata
 
 data class Distance(
     val id: String,

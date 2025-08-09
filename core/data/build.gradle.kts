@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":core:database"))
     implementation(project(":core:health-connect"))
     implementation(project(":core:common"))
+    implementation(project(":core:datastore"))
 
     implementation(libs.androidx.work.manager)
 
